@@ -122,6 +122,8 @@ function ShowWork (triangle) {
 
     let sides = []
     let points = triangle.points
+
+    // Get length of sides
     for (let i = 0; i < points.length; i++){
         let [x1,y1] = points[i].position // current point
         let [x2,y2] = points[(i===2) ? 0: i+1].position // next point
@@ -131,8 +133,8 @@ function ShowWork (triangle) {
     }
 
     {
+        // COS
         let [a, b, c] = sides // Round all values to 2 decimal points
-        // let [a, b, c] = [12,10,11]
         WorkLines.push(`${b}^2=${a}^2+${c}^2-2(${a})(${b})Cos(B)`)
 
         let v = [b*b,a*a,c*c,2*a*c]
@@ -153,14 +155,17 @@ function ShowWork (triangle) {
         f = v.map(round, 2)
         WorkLines.push(`Cos(B)=${f[0]}`)
 
-        v = [
-            Math.acos(v[0] * -1) *// Inverse of cosine
-            (180/Math.PI) // convert from radians to degrees
-        ]
+         // convert from radians to degrees
+        function Degrees(x) {
+            return x * (180/Math.PI)
+        }
+        v = [Math.acos([v[0]] * -1)] // Inverse of cosine
         f = v.map(round, 2)
         WorkLines.push(`Cos^-1(B)=${f[0]}°`)
-        points[0].angle = f
-        console.log(sides)
+
+        points[0].angle = Degrees(v[0])
+        points[1].angle = Degrees(Math.asin(sides[1]/sides[2]))
+        console.log(sides[0]/sides[1])
 
     }
 }
